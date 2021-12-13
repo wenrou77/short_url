@@ -4,6 +4,8 @@ const bodyParser = require('body-parser')
 const mongoose = require('mongoose')
 const app = express()
 const port = 3000
+const generateRandomword = require('./generate_randomword')
+
 mongoose.connect('mongodb://localhost/short-url', { useNewUrlParser: true, useUnifiedTopology: true })
 
 const db = mongoose.connection
@@ -22,8 +24,11 @@ app.get('/', (req, res) => {
   res.render('index')
 })
 
-app.get('/result', (req, res) => {
-  res.render('result')
+app.post('/result', (req, res) => {
+  const urlIn = req.body.urlIn
+  const urlTail = generateRandomword(5)
+  const urlOut = "https://shortURL.com/" + urlTail
+  res.render('result', { urlIn, urlOut })
 })
 
 app.listen(port, () => {
