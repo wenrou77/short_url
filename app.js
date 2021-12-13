@@ -1,4 +1,6 @@
 const express = require('express')
+const exphbs = require('express-handlebars')
+const bodyParser = require('body-parser')
 const mongoose = require('mongoose')
 const app = express()
 const port = 3000
@@ -12,8 +14,12 @@ db.once('open', () => {
   console.log('mongodb connected!')
 })
 
+app.engine('handlebars', exphbs({ defaultLayout: 'main' }))
+app.set('view engine', 'handlebars')
+app.use(bodyParser.urlencoded({ extended: true }))
+
 app.get('/', (req, res) => {
-  res.send('Hello')
+  res.render('index')
 })
 
 app.listen(port, () => {
