@@ -1,5 +1,5 @@
 <div class="d-flex justify-content-center ">
-  <div class="card" style="margin:2rem;padding:2rem;width: 30rem; height: 25rem">
+  <div class="card" style="margin:2rem;padding:2rem;width: 30rem; height: 27rem">
     <div class="card-top">
       <h5 class="card-title" style="text-align:center">URL Shortener</h5>
       <img class="card-img-top" style="display: block;margin-left:auto;width:12rem;padding:1rem;margin-right:auto"
@@ -7,12 +7,32 @@
         alt="url_image">
     </div>
     <div class="card-body d-flex flex-column align-items-center">
-      <form action="/result" method="POST">
-        <input class="form-control" type="text" placeholder="input URL here" name="urlIn" required>
-        <a href="/result">
-          <button class="btn btn-outline-primary" style="width:10rem;margin:1rem" type="submit">Shorten</button>
-        </a>
+      {{!-- 若使用者沒有輸入內容，就按下了送出鈕，需要防止表單送出並提示使用者 --}}
+      <form action="/result" method="POST" id="form" novalidate>
+        <div class="mb-3">
+          <input class="form-control" type="text" placeholder="input URL here" name="urlIn" required>
+          <div class="valid-feedback">Looks Good!</div>
+          <div class="invalid-feedback">Please enter you URL.</div>
+        </div>
+        <button id="submitButton" class="btn btn-outline-primary" style="width:10rem;margin:1rem"
+          type="submit">Shorten</button>
       </form>
     </div>
   </div>
 </div>
+
+
+<script>
+  const submitButton = document.querySelector('#submitButton')
+  const form = document.querySelector('#form')
+  submitButton.addEventListener('click', function onSubmitButtonClicked(event) {
+    form.classList.add('was-validated')
+  })
+  form.addEventListener('submit', function onFormSubmit(event) {
+    if (!form.checkValidity()) {
+      event.preventDefault()
+      event.stopPropagation()
+    }
+  })
+
+</script>

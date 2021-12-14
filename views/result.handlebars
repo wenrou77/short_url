@@ -8,8 +8,33 @@
     </div>
     <div class="card-body d-flex flex-column align-items-center">
       <h5>Success! Please use this link:</h5>
-      <a href="{{urlIn}}" target="_blank">{{urlOut}}</a>
-      <a href="#" class="btn btn-primary" style="width:10rem;margin:1rem">Copy</a>
+      <a href="{{urlIn}}" target="_blank">
+        <div id="copy-url">{{urlOut}}</div>
+      </a>
+      <div class="buttons">
+        <button id="copy-button" class="btn btn-primary" style="width:10rem;margin:1rem" type="submit">Copy</button>
+        <a href='/'><button class="btn btn-outline-primary">back</button></a>
+      </div>
     </div>
   </div>
 </div>
+
+<script>
+  const copyButton = document.querySelector('#copy-button')
+  //copyButton.addEventListener('click', copyShortURL())
+  //copyButton.addEventListener('click', function temp(event) {
+  //  console.log('hi')
+  // })
+  copyButton.addEventListener('click', function onSubmitButtonClicked(event) {
+    console.log('hi')
+  })
+
+  function copyShortURL() {
+    console.log('hi')
+    var content = document.getElementById('copy-url');
+    console.log(content)
+    content.select();
+    document.execCommand('copy');
+    alert("Copied!");
+  }
+</script>
