@@ -12,28 +12,22 @@
         <div id="copy-url">{{urlOut}}</div>
       </a>
       <div class="buttons">
-        <button id="copy-button" class="btn btn-primary" style="width:10rem;margin:1rem" type="submit">Copy</button>
+        <button class="btn btn-primary" style="width:10rem;margin:1rem" onclick="copyShortURL()">Copy</button>
         <a href='/'><button class="btn btn-outline-primary">back</button></a>
       </div>
     </div>
   </div>
 </div>
 
+{{!-- 使用者可以按 Copy 來複製縮短後的網址 --}}
 <script>
-  const copyButton = document.querySelector('#copy-button')
-  //copyButton.addEventListener('click', copyShortURL())
-  //copyButton.addEventListener('click', function temp(event) {
-  //  console.log('hi')
-  // })
-  copyButton.addEventListener('click', function onSubmitButtonClicked(event) {
-    console.log('hi')
-  })
-
   function copyShortURL() {
-    console.log('hi')
-    var content = document.getElementById('copy-url');
-    console.log(content)
-    content.select();
+    let content = document.getElementById('copy-url');
+    let selection = window.getSelection();
+    let range = document.createRange();
+    range.selectNodeContents(content);
+    selection.removeAllRanges();
+    selection.addRange(range);
     document.execCommand('copy');
     alert("Copied!");
   }

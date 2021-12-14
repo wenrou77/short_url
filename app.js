@@ -5,7 +5,6 @@ const mongoose = require('mongoose')
 const app = express()
 const port = process.env.PORT || 3000
 const generateRandomword = require('./generate_randomword')
-//const copyShortURL = require('./copy_shorturl')
 const Shorturl = require('./models/shorturl')
 
 mongoose.connect('mongodb://localhost/short-url', { useNewUrlParser: true, useUnifiedTopology: true })

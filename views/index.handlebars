@@ -7,7 +7,6 @@
         alt="url_image">
     </div>
     <div class="card-body d-flex flex-column align-items-center">
-      {{!-- 若使用者沒有輸入內容，就按下了送出鈕，需要防止表單送出並提示使用者 --}}
       <form action="/result" method="POST" id="form" novalidate>
         <div class="mb-3">
           <input class="form-control" type="text" placeholder="input URL here" name="urlIn" required>
@@ -21,7 +20,7 @@
   </div>
 </div>
 
-
+{{!-- 若使用者沒有輸入內容，就按下了送出鈕，需要防止表單送出並提示使用者 --}}
 <script>
   const submitButton = document.querySelector('#submitButton')
   const form = document.querySelector('#form')
