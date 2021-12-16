@@ -1,14 +1,13 @@
 const express = require('express')
 const exphbs = require('express-handlebars')
-const bodyParser = require('body-parser')
 const mongoose = require('mongoose')
+const bodyParser = require('body-parser')
 const app = express()
 const port = process.env.PORT || 3000
 const generateRandomword = require('./generate_randomword')
 const Shorturl = require('./models/shorturl')
 
 mongoose.connect('mongodb://localhost/short-url', { useNewUrlParser: true, useUnifiedTopology: true })
-
 const db = mongoose.connection
 db.on('error', () => {
   console.log('mongodb error!')
@@ -21,10 +20,14 @@ app.engine('handlebars', exphbs({ defaultLayout: 'main' }))
 app.set('view engine', 'handlebars')
 app.use(bodyParser.urlencoded({ extended: true }))
 
+//渲染首頁
 app.get('/', (req, res) => {
   res.render('index')
 })
 
+//update短網址資料
+///輸入的網址若不存在於資料庫，則新增一筆「原始網址(urlIn) & 短網址序號(urlOut)」
+// 若存在，則從資料庫中渲染短網址
 app.post('/result', (req, res) => {
   const host = req.headers.host
   const urlIn = req.body.urlIn
@@ -32,13 +35,10 @@ app.post('/result', (req, res) => {
   Shorturl.find()
     .lean()
     .then(datas => {
-      //查看輸入的網址是否已在資料庫中，若存在，則渲染已存入的短網址
-      //若不存在，則存入資料庫，渲染出新的亂數短網址
       const urlExisted = datas.find(data => data.urlIn === urlIn)
       if (urlExisted === undefined) {
         return Shorturl.create({ urlIn, urlOut })
           .then(() => res.render('result', { urlIn, urlOut, host }))
-          .catch(error => console.log(error))
       } else {
         res.render('result', { urlIn, urlOut: urlExisted.urlOut, host })
       }
@@ -46,9 +46,11 @@ app.post('/result', (req, res) => {
     .catch(err => console.log(err))
 })
 
+//將短網址導向原本網址
 app.get('/:urlOut', (req, res) => {
   const { urlOut } = req.params
   return Shorturl.findOne({ urlOut })
+    .lean()
     .then(data => res.redirect(data.urlIn))
     .catch(error => console.log(error))
 })
