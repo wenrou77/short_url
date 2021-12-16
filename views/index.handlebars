@@ -7,10 +7,10 @@
         alt="url_image">
     </div>
     <div class="card-body d-flex flex-column align-items-center">
-      <form action="/result" method="POST" id="form" novalidate>
+      <form action="/result/{{url._id}}" method="POST" id="form" novalidate>
         <div class="mb-3">
           <input class="form-control" type="text" placeholder="input URL here" name="urlIn" required>
-          <div class="valid-feedback">Looks Good!</div>
+          {{!-- <div class="valid-feedback">Looks Good!</div> --}}
           <div class="invalid-feedback">Please enter you URL.</div>
         </div>
         <button id="submitButton" class="btn btn-outline-primary" style="width:10rem;margin:1rem"

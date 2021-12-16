@@ -26,24 +26,31 @@ app.get('/', (req, res) => {
 })
 
 app.post('/result', (req, res) => {
+  const host = req.headers.host
   const urlIn = req.body.urlIn
-  const urlTail = generateRandomword(5)
-  const urlOut = "https://shortURL.com/" + urlTail
+  const urlOut = generateRandomword(5)
   Shorturl.find()
     .lean()
     .then(datas => {
       //查看輸入的網址是否已在資料庫中，若存在，則渲染已存入的短網址
       //若不存在，則存入資料庫，渲染出新的亂數短網址
-      const urlExisted = datas.filter(data => data.urlIn === urlIn)
-      if (urlExisted.length !== 0) {
-        res.render('result', { urlIn, urlOut: urlExisted[0].urlOut })
-      } else {
+      const urlExisted = datas.find(data => data.urlIn === urlIn)
+      if (urlExisted === undefined) {
         return Shorturl.create({ urlIn, urlOut })
-          .then(() => res.render('result', { urlIn, urlOut }))
+          .then(() => res.render('result', { urlIn, urlOut, host }))
           .catch(error => console.log(error))
+      } else {
+        res.render('result', { urlIn, urlOut: urlExisted.urlOut, host })
       }
     })
     .catch(err => console.log(err))
+})
+
+app.get('/:urlOut', (req, res) => {
+  const { urlOut } = req.params
+  return Shorturl.findOne({ urlOut })
+    .then(data => res.redirect(data.urlIn))
+    .catch(error => console.log(error))
 })
 
 app.listen(port, () => {
